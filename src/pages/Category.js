@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
-function Category() {
+const Category = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {

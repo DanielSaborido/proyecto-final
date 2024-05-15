@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function User() {
+const User = ({userId}) => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    axios.get('/users/{user_id}')
+    axios.get(`/customers/${userId}`)
       .then(response => {
         setUser(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
-  }, []);
+  }, [userId]);
 
   return (
     <div>

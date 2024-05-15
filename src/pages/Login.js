@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { message } from "antd";
 import axios from 'axios';
 
-function Login() {
+const Login = () => {
   const [credentials, setCredentials] = useState({});
   const [register, setRegister] = useState({ name: '', email: '', password: '', confirmPassword: '', phone: '' });
   const [paymentMethod, setPaymentMethod] = useState({});
@@ -11,7 +12,7 @@ function Login() {
   const handleLogin = () => {
     axios.post('/login', credentials)
       .then(response => {
-        // Manejar la respuesta de la API
+        message.success('Usuario berificado con exito')
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -26,7 +27,7 @@ function Login() {
 
     axios.post('/register', register)
       .then(response => {
-        // Manejar la respuesta de la API
+        message.success('Usuario registrado con exito')
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -37,7 +38,7 @@ function Login() {
     axios.post('/payment-methods', paymentMethod)
       .then(response => {
         setPaymentMethodVisible(false)
-        // Manejar la respuesta de la API
+        message.success('Tarjeta registrada con exito')
       })
       .catch(error => {
         console.error('There was an error!', error);
