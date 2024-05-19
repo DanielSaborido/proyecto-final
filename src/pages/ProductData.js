@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const Product = ({product}) => {
+const Product = () => {
+  const { id } = useParams()
   const [productData, setProductData] = useState();
 
   useEffect(() => {
-    axios.get(`/products/${product}`)
+    axios.get(`/products/${id}`)
       .then(response => {
         setProductData(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
-  }, [product]);
+  }, [id]);
 
   return (
     <div>

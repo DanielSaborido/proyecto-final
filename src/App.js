@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Category from './pages/Category';
-import Product from './pages/Product';
+import ProductList from './pages/ProductList';
+import ProductData from './pages/ProductData';
 import Login from './pages/Login';
 import User from './pages/User';
 import Admin from './pages/Admin';
@@ -16,7 +17,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/categories" element={<Category />} />
-        <Route path="/products/:categoryId" element={<Product />} />
+        <Route path="/products/list/:categoryId" element={<ProductList />} />
+        <Route path="/products/:productId" element={<ProductData />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<User />} />
         <Route path="/profile" element={<Admin />} />

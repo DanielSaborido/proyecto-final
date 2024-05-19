@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Search from './Search';
 
 const RawNavbar = () => {
   return (
     <nav>
+      <Search/>
       <ul>
         <li><Link to="/">Inicio</Link></li>
         <li><Link to="/categories">Categorías</Link></li>

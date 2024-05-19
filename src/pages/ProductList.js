@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const RawHome = () => {
+const RawProductList = ({category}) => {
   const navigate = useNavigate()
+  const { id } = useParams()
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('/products/list/0')
+    axios.get(`/products/list/${id}`)
      .then(response => {
         setProducts(response.data);
       })
      .catch(error => {
         console.error('There was an error!', error);
       });
-  }, []);
+  }, [id]);
 
   return (
     <>
-      <h1>Inicio</h1>
+      <h1>Productos de {category.name}</h1>
       <section className="products">
         {products.map((product, index) => (
           <div key={index} className="product_card" onClick={navigate(`/products/${product.id}`)}>
@@ -32,7 +33,7 @@ const RawHome = () => {
   );
 }
 
-const Home = styled(RawHome)`
+const ProductList = styled(RawProductList)`
 .products {
     display: flex;
     flex-wrap: wrap;
@@ -53,4 +54,4 @@ const Home = styled(RawHome)`
   }
 `;
 
-export default Home;
+export default ProductList;
