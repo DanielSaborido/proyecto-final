@@ -12,7 +12,7 @@ const Login = () => {
   const handleLogin = () => {
     axios.post('/login', credentials)
       .then(response => {
-        message.success('Usuario berificado con exito')
+        message.success('Usuario verificado con exito')
       })
       .catch(error => {
         console.error('There was an error!', error);
