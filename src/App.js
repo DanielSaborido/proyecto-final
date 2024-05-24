@@ -4,7 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Category from './pages/Category';
 import ProductList from './pages/ProductList';
-import ProductData from './pages/ProductData';
+import Product from './pages/ProductData';
 import Login from './pages/Login';
 import User from './pages/User';
 import Admin from './pages/Admin';
@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/categories" element={<Category />} />
         <Route path="/products/list/:categoryId" element={<ProductList />} />
-        <Route path="/products/:productId" element={<ProductData />} />
+        <Route path="/products/:productId" element={<Product />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<User />} />
         <Route path="/profile" element={<Admin />} />
