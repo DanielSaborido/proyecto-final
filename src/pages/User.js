@@ -69,20 +69,24 @@ const User = ({userId}) => {
       {isModalVisible && (
         <Modal title={'Detalles de la orden'} visible={isModalVisible} onCancel={() => {setIsModalVisible(false);setTotalCost(0)}}>
           <table>
-            <thead></thead>
+            <thead>
+              <tr>Producto</tr>
+              <tr>Cantidad</tr>
+              <tr>Precio</tr>
+            </thead>
             <tbody>
                 {orderDetails.map((product) => {
-                  setTotalCost(totalCost+=(product.quantity*product.unit_price))
+                  setTotalCost(totalCost+=(product.total_cost))
                   return (
                     <tr key={product.id}>
                       <td>{product.product_name}</td>
                       <td>{product.quantity}</td>
-                      <td>{product.unit_price}</td>
+                      <td>{product.total_cost}</td>
                     </tr>
                   )
                 })}
               <tr>
-                <td>Coste total: {totalCost}€</td>
+                <td colSpan={3}>Coste total: {totalCost}€</td>
               </tr>
             </tbody>
           </table>
