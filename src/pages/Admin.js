@@ -7,6 +7,9 @@ import UserTab from '../adminSections/UserTab'
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('customers')
+  const [userTypeAllow, setUserTypeAllow] = useState(null)
+  const token = localStorage.getItem('token')
+  setUserTypeAllow(token.charAt(0) === 'A')
 
   return (
     <div>
@@ -21,9 +24,11 @@ const Admin = () => {
         <Tabs.TabPane tab="Productos" key="products">
           <ProductTab />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Usuarios" key="users">
-          <UserTab />
-        </Tabs.TabPane>
+        {userTypeAllow? (
+          <Tabs.TabPane tab="Usuarios" key="users">
+            <UserTab />
+          </Tabs.TabPane>
+        ) : null}
       </Tabs>
     </div>
   )

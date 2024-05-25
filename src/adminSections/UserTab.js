@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Modal, Form, Input, Button, message } from 'antd'
+import { Table, Modal, Form, Input, Button, Checkbox, message } from 'antd'
 import axios from 'axios'
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 
@@ -15,6 +15,8 @@ const UserTab = () => {
     name: '',
     email: '',
     password: '',
+    phone: '',
+    admin: 0
   })
 
   useEffect(() => {
@@ -78,9 +80,10 @@ const UserTab = () => {
         Agregar usuario
       </Button>
       <Table columns={[
+        { title: 'Imagen', dataIndex: 'picture' },
         { title: 'Nombre', dataIndex: 'name' },
         { title: 'Correo electrónico', dataIndex: 'email' },
-        { title: 'Imagen', dataIndex: 'picture' },
+        { title: 'Teléfono', dataIndex: 'phone' },
         { title: 'Acciones', render: (user) => (
           <div>
             <button onClick={() => { setEditingUser(user); setIsModalVisible(true) }}><EditOutlined /></button>
@@ -91,6 +94,9 @@ const UserTab = () => {
       {isModalVisible && (
         <Modal title={editingUser? "Editar usuario" : "Agregar usuario"} visible={isModalVisible} onCancel={() => setIsModalVisible(false)}>
           <Form>
+            <Form.Item label="Imagen">
+              <Input type="file" onChange={handleImageChange} />
+            </Form.Item>
             <Form.Item label="Nombre">
               <Input name="name" value={formValues.name} onChange={(event) => setFormValues({...formValues, name: event.target.value })} required />
             </Form.Item>
@@ -100,8 +106,11 @@ const UserTab = () => {
             <Form.Item label="Contraseña">
               <Input name="password" value={formValues.password} onChange={(event) => setFormValues({...formValues, password: event.target.value })} required />
             </Form.Item>
-            <Form.Item label="Imagen">
-              <Input type="file" onChange={handleImageChange} />
+            <Form.Item label="Teléfono">
+              <Input name="phone" value={formValues.phone} onChange={(event) => setFormValues({...formValues, phone: event.target.value })} required />
+            </Form.Item>
+            <Form.Item label="Administrador">
+              <Checkbox name="admin" checked={formValues.admin} onChange={(event) => setFormValues({...formValues, admin: event.target.checked })} />
             </Form.Item>
             <Button type="submit" onClick={handleUpdateUsers}>Guardar</Button>
           </Form>

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const ShoppingCart = ({customer}) => {
+const ShoppingCart = () => {
+  const token = localStorage.getItem('token')
+  const customer = token.split('_')[1]
   const [carts, setCarts] = useState([])
   const [lastCart, setLastCart] = useState([])
+  const [totalCost, setTotalCost] = useState(0)
 
   useEffect(() => {
     axios.get(`/orders/${customer}`)
@@ -16,7 +19,7 @@ const ShoppingCart = ({customer}) => {
   }, [customer])
 
   useEffect(() => {
-    if (carts.length !=0){
+    if (carts.length !== 0){
       axios.get(`/order-details/${carts[carts.length-1].id}`)
       .then(response => {
         setLastCart(response.data)

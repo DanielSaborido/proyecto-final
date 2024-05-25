@@ -1,22 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import Search from './Search';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+import Search from './Search'
 
 const RawNavbar = () => {
+  const token = localStorage.getItem('token')
+
   return (
     <nav>
       <Search/>
       <ul>
         <li><Link to="/">Inicio</Link></li>
         <li><Link to="/categories">Categorías</Link></li>
-        <li><Link to="/login">Iniciar sesión</Link></li>
-        <li><Link to="/profile">Perfil</Link></li>
-        <li><Link to="/cart">Carrito</Link></li>
-        {/* <li><Link to="/manage">Gestión</Link></li> */}
+        {token? (
+          <>
+            <li><Link to="/cart">Carrito</Link></li>
+            {token.charAt(0) === 'C'? (
+              <li><Link to="/profile">Gestión</Link></li>
+            ) : (
+              <li><Link to="/profile">Perfil</Link></li>
+            )}
+          </>
+        ) : (
+          <li><Link to="/login">Iniciar sesión</Link></li>
+        )}
       </ul>
     </nav>
-  );
+  )
 }
 
 const Navbar = styled(RawNavbar)`
@@ -49,4 +59,4 @@ const Navbar = styled(RawNavbar)`
   }
 `
 
-export default Navbar;
+export default Navbar

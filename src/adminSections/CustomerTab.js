@@ -81,11 +81,11 @@ const CustomerTab = () => {
         Agregar cliente
       </Button>
       <Table columns={[
+        { title: 'Imagen', dataIndex: 'picture' },
         { title: 'Nombre', dataIndex: 'name' },
         { title: 'Correo electrónico', dataIndex: 'email' },
         { title: 'Teléfono', dataIndex: 'phone' },
         { title: 'Direccion', dataIndex: 'address' },
-        { title: 'Imagen', dataIndex: 'picture' },
         { title: 'Acciones', render: (customer) => (
           <div>
             <button onClick={() => { setEditingCustomer(customer); setIsModalVisible(true) }}><EditOutlined /></button>
@@ -96,6 +96,9 @@ const CustomerTab = () => {
       {isModalVisible && (
         <Modal title={editingCustomer? "Editar cliente" : "Agregar cliente"} visible={isModalVisible} onCancel={() => setIsModalVisible(false)}>
           <Form onSubmit={handleUpdateCustomers}>
+            <Form.Item label="Imagen">
+              <Input type="file" onChange={handleImageChange} />
+            </Form.Item>
             <Form.Item label="Nombre">
               <Input name="name" value={formValues.name} onChange={(event) => setFormValues({...formValues, name: event.target.value })} required />
             </Form.Item>
@@ -110,9 +113,6 @@ const CustomerTab = () => {
             </Form.Item>
             <Form.Item label="Direccion">
               <Input name="address" value={formValues.address} onChange={(event) => setFormValues({...formValues, address: event.target.value })} required />
-            </Form.Item>
-            <Form.Item label="Imagen">
-              <Input type="file" onChange={handleImageChange} />
             </Form.Item>
             <Button type="submit">Guardar</Button>
           </Form>

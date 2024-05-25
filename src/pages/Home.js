@@ -8,7 +8,7 @@ const RawHome = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('/products/list/0')
+    axios.get('/products/list/1')
      .then(response => {
         setProducts(response.data);
       })

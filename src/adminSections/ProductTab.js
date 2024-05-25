@@ -96,6 +96,9 @@ const ProductTab = () => {
       {isModalVisible && (
         <Modal title={editingProduct? "Editar producto" : "Agregar producto"} visible={isModalVisible} onCancel={() => setIsModalVisible(false)}>
           <Form onSubmit={handleUpdateProducts}>
+            <Form.Item label="Imagen">
+              <Input type="file" onChange={handleImageChange} />
+            </Form.Item>
             <Form.Item label="Nombre">
               <Input name="name" value={formValues.name} onChange={(event) => setFormValues({...formValues, name: event.target.value })} required />
             </Form.Item>
@@ -110,9 +113,6 @@ const ProductTab = () => {
             </Form.Item>
             <Form.Item label="Cantidad">
               <Input name="quantity" value={formValues.name} onChange={(event) => setFormValues({...formValues, name: event.target.value })} required />
-            </Form.Item>
-            <Form.Item label="Imagen">
-              <Input type="file" onChange={handleImageChange} />
             </Form.Item>
             <Button type="submit">Guardar</Button>
           </Form>

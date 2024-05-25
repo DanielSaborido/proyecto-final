@@ -90,14 +90,14 @@ const CategoryTab = () => {
       {isModalVisible && (
         <Modal title={editingCategory? "Editar categoría" : "Agregar categoría"} visible={isModalVisible} onCancel={() => setIsModalVisible(false)}>
           <Form>
+            <Form.Item label="Imagen">
+              <Input type="file" onChange={handleImageChange} />
+            </Form.Item>
             <Form.Item label="Nombre">
               <Input name="name" value={formValues.name} onChange={(event) => setFormValues({...formValues, name: event.target.value })} required />
             </Form.Item>
             <Form.Item label="Descripcion">
               <Input name="description" value={formValues.description} onChange={(event) => setFormValues({...formValues, description: event.target.value })} required />
-            </Form.Item>
-            <Form.Item label="Imagen">
-              <Input type="file" onChange={handleImageChange} />
             </Form.Item>
             <Button type="submit" onClick={handleUpdateCategories}>Guardar</Button>
           </Form>

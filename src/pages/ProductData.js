@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Input, Button} from 'antd'
+import { Input, Button, Avatar} from 'antd'
 import { useParams } from 'react-router-dom'
 import { DoubleRightOutlined } from '@ant-design/icons'
 
 const Product = () => {
   const { id } = useParams()
+  const token = localStorage.getItem('token')
   const [productData, setProductData] = useState([])
   const [comments, setComments] = useState([])
   const [formComment, setFormComment] = useState({
@@ -41,7 +42,7 @@ const Product = () => {
   }
 
   const postComent = async() =>{
-    let aux = {...formComment, product_id:id, customer_id:customerId}
+    let aux = {...formComment, product_id:id, customer_id:token.split('_')[1]}
     await axios.post(`/comments-and-ratings`, aux)
     .then(response => {
       setComments(...comments, response.data)
@@ -59,16 +60,18 @@ const Product = () => {
         <p>{productData.description}</p>
         <p>Price: {productData.price}</p>
       </section>
-      {comments.length != 0 &&
+      {comments.length !== 0 &&
         <section>
-          <form onSubmit={postComent}>
-            <Input name="rating" type='number' value={formComment.rating} onChange={(event) => setFormComment({...formComment, rating: event.target.value })} required />
-            <Input name="comment" value={formComment.comment} onChange={(event) => setFormComment({...formComment, comment: event.target.value })}/>
-            <Button type="submit"><DoubleRightOutlined /></Button>
-          </form>
+          {token &&
+            <form onSubmit={postComent}>
+              <Input name="rating" type='number' value={formComment.rating} onChange={(event) => setFormComment({...formComment, rating: event.target.value })} required />
+              <Input name="comment" value={formComment.comment} onChange={(event) => setFormComment({...formComment, comment: event.target.value })}/>
+              <Button type="submit"><DoubleRightOutlined /></Button>
+            </form>
+          }
           {comments.map((comment, index) => (
             <article>
-              <img src={comment.customer_picture}/>
+              {comment.customer_picture?<img src={comment.customer_picture}/>:<Avatar/>}
               <h3>{comment.customer_name}</h3>
               <p>{comment.rating}/5</p>
               <p>{comment.comment}</p>
