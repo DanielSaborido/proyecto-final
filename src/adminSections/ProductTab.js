@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'eact'
-import { Table, Modal, Form, Input, Button, message } from 'antd'
+import { Table, Modal, Form, Input, Button, message, Select } from 'antd'
 import axios from 'axios'
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 
 const ProductTab = () => {
   const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
   const [editingProduct, setEditingProduct] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [formValues, setFormValues] = useState({
@@ -20,6 +21,11 @@ const ProductTab = () => {
   })
 
   useEffect(() => {
+    getProducts()
+    getCategories()
+  }, [])
+
+  const getProducts = () => {
     axios.get('/products')
     .then(response => {
       setProducts(response.data)
@@ -27,7 +33,17 @@ const ProductTab = () => {
     .catch(error => {
       console.error('There was an error!', error)
     })
-  }, [])
+  }
+  
+  const getCategories = () => {
+    axios.get('/categories')
+    .then(response => {
+      setCategories(response.data)
+    })
+    .catch(error => {
+      console.error('There was an error!', error)
+    })
+  }
 
   const handleUpdateProducts = (event) => {
     event.preventDefault()
@@ -103,13 +119,24 @@ const ProductTab = () => {
               <Input name="name" value={formValues.name} onChange={(event) => setFormValues({...formValues, name: event.target.value })} required />
             </Form.Item>
             <Form.Item label="Descripción">
-              <Input name="description" value={formValues.price} onChange={(event) => setFormValues({...formValues, price: event.target.value })} required />
+              <Input name="description" value={formValues.description} onChange={(event) => setFormValues({...formValues, description: event.target.value })} required />
             </Form.Item>
             <Form.Item label="Precio">
               <Input name="price" value={formValues.price} onChange={(event) => setFormValues({...formValues, price: event.target.value })} required />
             </Form.Item>
             <Form.Item label="Categoría">
-              <Input name="category_id" value={formValues.category_id} onChange={(event) => setFormValues({...formValues, category_id: event.target.value })} required />
+            <Select
+              name="category_id"
+              value={formValues.category_id}
+              onChange={(value) => setFormValues({...formValues, category_id: value })}
+              required
+            >
+              {categories.map(category => (
+                <Select.Option key={category.id} value={category.id}>
+                  {category.name}
+                </Select.Option>
+              ))}
+            </Select>
             </Form.Item>
             <Form.Item label="Cantidad">
               <Input name="quantity" value={formValues.name} onChange={(event) => setFormValues({...formValues, name: event.target.value })} required />
