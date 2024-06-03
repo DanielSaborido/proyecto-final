@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'eact'
+import React, { useState, useEffect } from 'react'
 import { Table, Modal, Form, Input, Button, message, Select } from 'antd'
 import axios from 'axios'
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
@@ -26,7 +26,7 @@ const ProductTab = () => {
   }, [])
 
   const getProducts = () => {
-    axios.get('/products')
+    axios.get('http://api-proyecto-final.test/api/products')
     .then(response => {
       setProducts(response.data)
     })
@@ -36,7 +36,7 @@ const ProductTab = () => {
   }
   
   const getCategories = () => {
-    axios.get('/categories')
+    axios.get('http://api-proyecto-final.test/api/categories')
     .then(response => {
       setCategories(response.data)
     })
@@ -48,7 +48,7 @@ const ProductTab = () => {
   const handleUpdateProducts = (event) => {
     event.preventDefault()
     if (editingProduct) {
-      axios.put(`/products/${editingProduct.id}`, {...formValues, picture: image.base64 })
+      axios.put(`http://api-proyecto-final.test/api/products/${editingProduct.id}`, {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setEditingProduct(null)
@@ -57,7 +57,7 @@ const ProductTab = () => {
         console.error('There was an error!', error)
       })
     } else {
-      axios.post('/products', {...formValues, picture: image.base64 })
+      axios.post('http://api-proyecto-final.test/api/products', {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setProducts([...products, response.data])
@@ -70,7 +70,7 @@ const ProductTab = () => {
   }
 
   const handleDeleteProducts = (productId) => {
-    axios.delete(`/products/${productId}`)
+    axios.delete(`http://api-proyecto-final.test/api/products/${productId}`)
     .then(response => {
       message.success('Producto eliminado con exito')
     })

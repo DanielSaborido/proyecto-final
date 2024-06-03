@@ -20,7 +20,7 @@ const UserTab = () => {
   })
 
   useEffect(() => {
-    axios.get('/users')
+    axios.get('http://api-proyecto-final.test/api/users')
     .then(response => {
       setUsers(response.data)
     })
@@ -31,7 +31,7 @@ const UserTab = () => {
 
   const handleUpdateUsers = () => {
     if (editingUser) {
-      axios.put(`/users/${editingUser.id}`, {...formValues, picture: image.base64 })
+      axios.put(`http://api-proyecto-final.test/api/users/${editingUser.id}`, {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setEditingUser(null)
@@ -40,7 +40,7 @@ const UserTab = () => {
         console.error('There was an error!', error)
       })
     } else {
-      axios.post('/users', {...formValues, picture: image.base64 })
+      axios.post('http://api-proyecto-final.test/api/users', {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setUsers([...users, response.data])
@@ -53,7 +53,7 @@ const UserTab = () => {
   }
 
   const handleDeleteUsers = (userId) => {
-    axios.delete(`/users/${userId}`)
+    axios.delete(`http://api-proyecto-final.test/api/users/${userId}`)
     .then(response => {
       message.success('Usuario eliminado con exito')
     })
@@ -112,7 +112,7 @@ const UserTab = () => {
             <Form.Item label="Administrador">
               <Checkbox name="admin" checked={formValues.admin} onChange={(event) => setFormValues({...formValues, admin: event.target.checked })} />
             </Form.Item>
-            <Button type="submit" onClick={handleUpdateUsers}>Guardar</Button>
+            <Button type="submit" onClick={() => handleUpdateUsers}>Guardar</Button>
           </Form>
         </Modal>
       )}

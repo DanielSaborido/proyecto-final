@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Button, Modal, Form, Radio, message } from 'antd'
 
-const User = ({userId}) => {
+const User = ({}) => {
+  const token = (localStorage.getItem('token')).split('_');
+  const userId = token[1];
   const [user, setUser] = useState({})
   const [orders, setOrders] = useState([])
   const [totalCost, setTotalCost] = useState(0)
@@ -29,7 +31,7 @@ const User = ({userId}) => {
   }, [orderId])
 
   const getUser = async() => {
-    await axios.get(`/customers/${userId}`)
+    await axios.get(`http://api-proyecto-final.test/api/customers/${userId}`)
     .then(response => {
       setUser(response.data)
     })
@@ -39,7 +41,7 @@ const User = ({userId}) => {
   }
 
   const getOrders = async() => {
-    await axios.get(`/orders/${userId}`)
+    await axios.get(`http://api-proyecto-final.test/api/orders/${userId}`)
     .then(response => {
       setOrders(response.data)
     })
@@ -49,7 +51,7 @@ const User = ({userId}) => {
   }
 
   const getOrderDetails = async() => {
-    await axios.get(`/order-details/${orderId}`)
+    await axios.get(`http://api-proyecto-final.test/api/order-details/${orderId}`)
     .then(response => {
       setOrderDetails(response.data)
     })
@@ -86,7 +88,7 @@ const User = ({userId}) => {
       setPaymentMethod({ ...paymentMethod, cvv: null })
       return
     }
-    axios.post('/payment-methods', {...paymentMethod,customer_id:userId})
+    axios.post('http://api-proyecto-final.test/api/payment-methods', {...paymentMethod,customer_id:userId})
     .then(response => {
       message.success('tarjeta agregada')
     })
@@ -102,7 +104,7 @@ const User = ({userId}) => {
         <img src={user.picture}/>
         <h2>{user.name}</h2>
         <p>{user.email}</p>
-        <button onClick={setPaymentMethodVisible(true)}>Agregar metodo de pago</button>
+        <button onClick={() => setPaymentMethodVisible(true)}>Agregar metodo de pago</button>
       </section>
       <section>
         <ul>

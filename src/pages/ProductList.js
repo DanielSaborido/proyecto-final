@@ -1,29 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import styled from 'styled-components'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const RawProductList = ({category}) => {
   const navigate = useNavigate()
   const { id } = useParams()
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([])
 
   useEffect(() => {
-    axios.get(`/products/list/${id}`)
-     .then(response => {
-        setProducts(response.data);
-      })
-     .catch(error => {
-        console.error('There was an error!', error);
-      });
-  }, [id]);
+    if (id){
+      getProducts()
+    }
+  }, [id])
+
+  const getProducts = async() => {
+    await axios.get(`http://api-proyecto-final.test/api/products/list/${id}`)
+    .then(response => {
+      setProducts(response.data)
+    })
+    .catch(error => {
+      console.error('There was an error!', error)
+    });
+  }
 
   return (
     <>
-      <h1>Productos de {category.name}</h1>
+      <h1>Productos de </h1>
       <section className="products">
-        {products.map((product, index) => (
-          <div key={index} className="product_card" onClick={navigate(`/products/${product.id}`)}>
+        {products?.map((product, index) => (
+          <div key={index} className="product_card" onClick={() => navigate(`/products/${product.id}`)}>
             <img src={product.image} alt={product.name} className="product_image" />
             <h2>{product.name}</h2>
           </div>
@@ -54,4 +60,4 @@ const ProductList = styled(RawProductList)`
   }
 `;
 
-export default ProductList;
+export default ProductList

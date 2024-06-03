@@ -8,21 +8,25 @@ const RawHome = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('/products/list/1')
-     .then(response => {
-        setProducts(response.data);
-      })
-     .catch(error => {
-        console.error('There was an error!', error);
-      });
+    getProductosTemporada()
   }, []);
+
+  const getProductosTemporada = async() =>{
+    await axios.get('http://api-proyecto-final.test/api/products/list/1')
+    .then(response => {
+      setProducts(response.data);
+    })
+    .catch(error => {
+      console.error('There was an error!', error);
+    });
+  }
 
   return (
     <>
       <h1>Inicio</h1>
       <section className="products">
-        {products.map((product, index) => (
-          <div key={index} className="product_card" onClick={navigate(`/products/${product.id}`)}>
+        {products?.map((product, index) => (
+          <div key={index} className="product_card" onClick={() => navigate(`/products/${product.id}`)}>
             <img src={product.image} alt={product.name} className="product_image" />
             <h2>{product.name}</h2>
           </div>

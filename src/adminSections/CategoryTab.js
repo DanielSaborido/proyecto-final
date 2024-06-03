@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'eact'
+import React, { useState, useEffect } from 'react'
 import { Table, Modal, Form, Input, Button, message } from 'antd'
 import axios from 'axios'
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
@@ -17,7 +17,7 @@ const CategoryTab = () => {
   })
 
   useEffect(() => {
-    axios.get('/categories')
+    axios.get('http://api-proyecto-final.test/api/categories')
     .then(response => {
       setCategories(response.data)
     })
@@ -28,7 +28,7 @@ const CategoryTab = () => {
 
   const handleUpdateCategories = () => {
     if (editingCategory) {
-      axios.put(`/categories/${editingCategory.id}`, {...formValues, picture: image.base64 })
+      axios.put(`http://api-proyecto-final.test/api/categories/${editingCategory.id}`, {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setEditingCategory(null)
@@ -37,7 +37,7 @@ const CategoryTab = () => {
         console.error('There was an error!', error)
       })
     } else {
-      axios.post('/categories', {...formValues, picture: image.base64 })
+      axios.post('http://api-proyecto-final.test/api/categories', {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setCategories([...categories, response.data])
@@ -50,7 +50,7 @@ const CategoryTab = () => {
   }
 
   const handleDeleteCategories = (categoryId) => {
-    axios.delete(`/categories/${categoryId}`)
+    axios.delete(`http://api-proyecto-final.test/api/categories/${categoryId}`)
     .then(response => {
       message.success('Categoría eliminada con exito')
     })
@@ -88,7 +88,7 @@ const CategoryTab = () => {
         ) }
       ]} dataSource={categories} />
       {isModalVisible && (
-        <Modal title={editingCategory? "Editar categoría" : "Agregar categoría"} visible={isModalVisible} onCancel={() => setIsModalVisible(false)}>
+        <Modal title={editingCategory? "Editar categoría" : "Agregar categoría"} visible={isModalVisible} onOk={() => handleUpdateCategories} onCancel={() => setIsModalVisible(false)}>
           <Form>
             <Form.Item label="Imagen">
               <Input type="file" onChange={handleImageChange} />
@@ -99,7 +99,6 @@ const CategoryTab = () => {
             <Form.Item label="Descripcion">
               <Input name="description" value={formValues.description} onChange={(event) => setFormValues({...formValues, description: event.target.value })} required />
             </Form.Item>
-            <Button type="submit" onClick={handleUpdateCategories}>Guardar</Button>
           </Form>
         </Modal>
       )}

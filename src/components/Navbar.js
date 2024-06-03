@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Search from './Search'
 
 const RawNavbar = () => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
 
   return (
     <nav>
@@ -15,8 +15,8 @@ const RawNavbar = () => {
         {token? (
           <>
             <li><Link to="/cart">Carrito</Link></li>
-            {token.charAt(0) === 'C'? (
-              <li><Link to="/profile">Gestión</Link></li>
+            {token.charAt(0) !== 'C'? (
+              <li><Link to="/gestion">Gestión</Link></li>
             ) : (
               <li><Link to="/profile">Perfil</Link></li>
             )}

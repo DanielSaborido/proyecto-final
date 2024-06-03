@@ -3,7 +3,8 @@ import axios from 'axios'
 import { Button, Modal, Form, Radio, message } from 'antd'
 
 const ShoppingCart = () => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
+  console.log("Token from localStorage:", token);
   const customer = token.split('_')[1]
   const [cart, setCart] = useState({})
   const [lastCart, setLastCart] = useState([])
@@ -17,7 +18,7 @@ const ShoppingCart = () => {
     cvv: ""})
 
   useEffect(() => {
-    axios.get(`/orders/${customer}/actual`)
+    axios.get(`http://api-proyecto-final.test/api/orders/${customer}/actual`)
      .then(response => {
         setCart(response.data)
       })
@@ -28,7 +29,7 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     if (cart!= {}) {
-      axios.get(`/order-details/${cart.id}`)
+      axios.get(`http://api-proyecto-final.test/api/order-details/${cart.id}`)
        .then(response => {
           setLastCart(response.data)
         })
@@ -56,7 +57,7 @@ const ShoppingCart = () => {
         status = 'store'
       }
   
-      axios.put(`/orders/${cart.id}`, {...cart, status: status})
+      axios.put(`http://api-proyecto-final.test/api/orders/${cart.id}`, {...cart, status: status})
      .then(response => {
         console.log(response.data)
         setIsModalVisible(false)
@@ -68,7 +69,7 @@ const ShoppingCart = () => {
   }
 
   const handlePaymentMethod = (customer) => {
-    axios.get(`/payment-methods/${customer}`)
+    axios.get(`http://api-proyecto-final.test/api/payment-methods/${customer}`)
      .then(response => {
         if (response.data.success){
           message.success('Pago realizado exitosamente')
@@ -117,10 +118,10 @@ const ShoppingCart = () => {
       setPaymentMethod({ ...paymentMethod, cvv: null })
       return
     }
-    axios.post('/payment-methods', {...paymentMethod,customer_id:customer})
+    axios.post('http://api-proyecto-final.test/api/payment-methods', {...paymentMethod,customer_id:customer})
     .then(response => {
       message.success('tarjeta agregada')
-      axios.put(`/orders/${cart.id}`, {...cart, status: 'paid'})
+      axios.put(`http://api-proyecto-final.test/api/orders/${cart.id}`, {...cart, status: 'paid'})
       .then(response => {
         console.log(response.data)
         setIsModalVisible(false)
@@ -145,7 +146,7 @@ const ShoppingCart = () => {
           <tr>Precio</tr>
         </thead>
         <tbody>
-          {lastCart.map((product) => {
+          {lastCart?.map((product) => {
             setTotalCost(totalCost += product.total_cost)
             return (
               <tr key={product.id}>

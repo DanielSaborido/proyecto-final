@@ -6,7 +6,8 @@ import { DoubleRightOutlined } from '@ant-design/icons'
 
 const Product = () => {
   const { id } = useParams()
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
+  console.log("Token from localStorage:", token);
   const [productData, setProductData] = useState([])
   const [comments, setComments] = useState([])
   const [formComment, setFormComment] = useState({
@@ -22,7 +23,7 @@ const Product = () => {
   }, [id])
 
   const getProduct = async() =>{
-    await axios.get(`/products/${id}`)
+    await axios.get(`http://api-proyecto-final.test/api/products/${id}`)
     .then(response => {
       setProductData(response.data)
     })
@@ -32,7 +33,7 @@ const Product = () => {
   }
 
   const getComments = async() =>{
-    await axios.get(`/comments-and-ratings/${id}`)
+    await axios.get(`http://api-proyecto-final.test/api/comments-and-ratings/${id}`)
     .then(response => {
       setComments(response.data)
     })
@@ -43,7 +44,7 @@ const Product = () => {
 
   const postComent = async() =>{
     let aux = {...formComment, product_id:id, customer_id:token.split('_')[1]}
-    await axios.post(`/comments-and-ratings`, aux)
+    await axios.post(`http://api-proyecto-final.test/api/comments-and-ratings`, aux)
     .then(response => {
       setComments(...comments, response.data)
     })

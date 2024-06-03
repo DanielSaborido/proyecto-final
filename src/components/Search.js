@@ -11,11 +11,12 @@ const RawSearch = () => {
   const [showClear, setShowClear] = useState(false);
 
   const handleSearch = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     setSearchTerm(event.target.value);
     setShowClear(true);
-    await axios.get(`/product/search`, {search: event.target.value})
+    await axios.get(`http://api-proyecto-final.test/api/products/search`, {params: { search: event.target.value }})
    .then(response => {
+    console.log(response.data)
       setProducts(response.data);
     })
    .catch(error => {
@@ -47,8 +48,8 @@ const RawSearch = () => {
       {products.length > 0 && (
         <div>
           <ul>
-            {products.map((product) => (
-              <li key={product.id} onClick={navigate(`/products/${product.id}`)}>{product.name}</li>
+            {products?.map((product) => (
+              <li key={product.id} onClick={() => navigate(`/products/${product.id}`)}>{product.name}</li>
             ))}
           </ul>
         </div>

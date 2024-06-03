@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'eact';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styled from 'tyled-components';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 const RawCategory = () => {
@@ -8,7 +8,7 @@ const RawCategory = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get('/categories')
+    axios.get('http://api-proyecto-final.test/api/categories')
      .then(response => {
         setCategories(response.data);
       })
@@ -21,8 +21,8 @@ const RawCategory = () => {
     <>
       <h1>Categorías</h1>
       <section className="categories">
-        {categories.map((category, index) => (
-          <div key={index} className="category_card" onClick={navigate(`/products/list/${category.id}`)}>
+        {categories?.map((category, index) => (
+          <div key={index} className="category_card" onClick={() => navigate(`/products/list/${category.id}`)}>
             <img src={category.image} alt={category.name} className="category_image" />
             <h2>{category.name}</h2>
           </div>

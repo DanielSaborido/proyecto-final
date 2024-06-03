@@ -9,15 +9,14 @@ import Login from './pages/Login'
 import User from './pages/User'
 import Admin from './pages/Admin'
 import ShoppingCart from './pages/ShoppingCart'
-import { getLocalStorage } from './utils/localStorage'
 
 function App() {
   const [userType, setUserType] = useState(null)
 
   useEffect(() => {
-    const token = getLocalStorage('token')
+    const token = localStorage.getItem('token');
     if (token) {
-      const userType = token.charAt(0) === 'C'? 'admin' : 'user'
+      const userType = token.charAt(0) === 'C'? 'user' : 'admin'
       setUserType(userType)
     }
   }, [])
@@ -28,13 +27,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/categories" element={<Category />} />
-        <Route path="/products/list/:categoryId" element={<ProductList />} />
-        <Route path="/products/:productId" element={<Product />} />
+        <Route path="/products/list/:id" element={<ProductList />} />
+        <Route path="/products/:id" element={<Product />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/profile"
-          element={userType === 'admin'? <Admin /> : <User />}
-        />
+        <Route path="/profile" element={<User />} />
+        <Route path="/gestion" element={<Admin />} />
         <Route path="/cart" element={<ShoppingCart />} />
       </Routes>
     </Router>
