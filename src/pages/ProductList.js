@@ -15,7 +15,7 @@ const RawProductList = ({category}) => {
   }, [id])
 
   const getProducts = async() => {
-    await axios.get(`http://api-proyecto-final.test/api/products/list/${id}`)
+    await axios.get(`/products/list/${id}`)
     .then(response => {
       setProducts(response.data)
     })

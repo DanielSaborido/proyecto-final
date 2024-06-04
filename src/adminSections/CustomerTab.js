@@ -20,7 +20,7 @@ const CustomerTab = () => {
   })
 
   useEffect(() => {
-    axios.get('http://api-proyecto-final.test/api/customers')
+    axios.get('/customers')
     .then(response => {
       setCustomers(response.data)
     })
@@ -32,7 +32,7 @@ const CustomerTab = () => {
   const handleUpdateCustomers = (event) => {
     event.preventDefault()
     if (editingCustomer) {
-      axios.put(`http://api-proyecto-final.test/api/customers/${editingCustomer.id}`, {...formValues, picture: image.base64 })
+      axios.put(`/customers/${editingCustomer.id}`, {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setEditingCustomer(null)
@@ -41,7 +41,7 @@ const CustomerTab = () => {
         console.error('There was an error!', error)
       })
     } else {
-      axios.post('http://api-proyecto-final.test/api/customers', {...formValues, picture: image.base64 })
+      axios.post('/customers', {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setCustomers([...customers, response.data])
@@ -54,7 +54,7 @@ const CustomerTab = () => {
   }
 
   const handleDeleteCustomers = (customerId) => {
-    axios.delete(`http://api-proyecto-final.test/api/customers/${customerId}`)
+    axios.delete(`/customers/${customerId}`)
     .then(response => {
     message.success('Cliente eliminado con exito')
     })

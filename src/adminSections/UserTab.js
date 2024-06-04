@@ -20,7 +20,7 @@ const UserTab = () => {
   })
 
   useEffect(() => {
-    axios.get('http://api-proyecto-final.test/api/users')
+    axios.get('/users')
     .then(response => {
       setUsers(response.data)
     })
@@ -31,7 +31,7 @@ const UserTab = () => {
 
   const handleUpdateUsers = () => {
     if (editingUser) {
-      axios.put(`http://api-proyecto-final.test/api/users/${editingUser.id}`, {...formValues, picture: image.base64 })
+      axios.put(`/users/${editingUser.id}`, {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setEditingUser(null)
@@ -40,7 +40,7 @@ const UserTab = () => {
         console.error('There was an error!', error)
       })
     } else {
-      axios.post('http://api-proyecto-final.test/api/users', {...formValues, picture: image.base64 })
+      axios.post('/users', {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setUsers([...users, response.data])
@@ -53,7 +53,7 @@ const UserTab = () => {
   }
 
   const handleDeleteUsers = (userId) => {
-    axios.delete(`http://api-proyecto-final.test/api/users/${userId}`)
+    axios.delete(`/users/${userId}`)
     .then(response => {
       message.success('Usuario eliminado con exito')
     })

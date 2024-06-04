@@ -8,7 +8,7 @@ const RawCategory = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get('http://api-proyecto-final.test/api/categories')
+    axios.get('/categories')
      .then(response => {
         setCategories(response.data);
       })

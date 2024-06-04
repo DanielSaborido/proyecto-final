@@ -14,7 +14,7 @@ const RawSearch = () => {
     event.preventDefault()
     setSearchTerm(event.target.value);
     setShowClear(true);
-    await axios.get(`http://api-proyecto-final.test/api/products/search`, {params: { search: event.target.value }})
+    await axios.get(`/products/search`, {params: { search: event.target.value }})
    .then(response => {
     console.log(response.data)
       setProducts(response.data);

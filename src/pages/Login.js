@@ -16,7 +16,7 @@ const Login = () => {
 
   const handleLogin = async(event) => {
     event.preventDefault();
-    await axios.post('http://api-proyecto-final.test/api/login', credentials)
+    await axios.post('/login', credentials)
     .then(response => {
       localStorage.setItem('token', response.data.token)
       message.success('Usuario verificado con exito')
@@ -34,12 +34,12 @@ const Login = () => {
       return
     }
 
-    await axios.post('http://api-proyecto-final.test/api/register', register)
+    await axios.post('/register', register)
     .then(response => {
       localStorage.setItem('token', response.data.token)
       const { cardNumber, expiryDate, cvv} = paymentMethod
       if (cardNumber && expiryDate && cvv) {
-        axios.post('http://api-proyecto-final.test/api/payment-methods', {...paymentMethod, customer_id: response.data.id})
+        axios.post('/payment-methods', {...paymentMethod, customer_id: response.data.id})
         .then(response => {
           message.success('Usuario registrado con exito')
           navigate('/')
@@ -93,7 +93,7 @@ const Login = () => {
       <h1>{registerVisible ? 'Registro' : 'Iniciar sesión'}</h1>
 
       {registerVisible ? (
-        <form onSubmit={handleRegister}>
+        <form>
           <input type="text" placeholder="Nombre" onChange={e => setRegister({ ...register, name: e.target.value })} required />
           <input type="email" placeholder="Correo electrónico" onChange={e => setRegister({ ...register, email: e.target.value })} required />
           <input type="password" placeholder="Contraseña" onChange={e => setRegister({ ...register, password: e.target.value })} required />
@@ -102,7 +102,7 @@ const Login = () => {
           <input type="text" placeholder="Direccion" onChange={e => setRegister({ ...register, address: e.target.value })} />
           <button type="button" onClick={() => setPaymentMethodVisible(true)}>Agregar método de pago</button>
           <button type="button" onClick={() => setRegisterVisible(false)}>Volver a login</button>
-          <button type="submit">Registrarse</button>
+          <button onClick={(e)=>{e.preventDefault();handleRegister()}}>Registrarse</button>
         </form>
       ) : (
         <form onSubmit={handleLogin}>
@@ -115,11 +115,11 @@ const Login = () => {
       {paymentMethodVisible && (
         <div>
           <h1>Agregar método de pago</h1>
-          <form onSubmit={handleAddPaymentMethod}>
+          <form>
             <input type="text" placeholder="Número de tarjeta" onChange={e => setPaymentMethod({ ...paymentMethod, cardNumber: e.target.value })} required />
             <input type="text" placeholder="Fecha de vencimiento" onChange={e => setPaymentMethod({ ...paymentMethod, expiryDate: e.target.value })} required />
             <input type="text" placeholder="CVV" onChange={e => setPaymentMethod({ ...paymentMethod, cvv: e.target.value })} required />
-            <button type="submit">Agregar método de pago</button>
+            <button onClick={(e)=>{e.preventDefault();handleAddPaymentMethod()}}>Agregar método de pago</button>
           </form>
         </div>
       )}

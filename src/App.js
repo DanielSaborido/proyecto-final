@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
@@ -12,6 +13,7 @@ import ShoppingCart from './pages/ShoppingCart'
 
 function App() {
   const [userType, setUserType] = useState(null)
+  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL
 
   useEffect(() => {
     const token = localStorage.getItem('token');

@@ -12,7 +12,7 @@ const RawHome = () => {
   }, []);
 
   const getProductosTemporada = async() =>{
-    await axios.get('http://api-proyecto-final.test/api/products/list/1')
+    await axios.get('/products/list/1')
     .then(response => {
       setProducts(response.data);
     })

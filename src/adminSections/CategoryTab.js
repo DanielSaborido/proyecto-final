@@ -17,7 +17,7 @@ const CategoryTab = () => {
   })
 
   useEffect(() => {
-    axios.get('http://api-proyecto-final.test/api/categories')
+    axios.get('/categories')
     .then(response => {
       setCategories(response.data)
     })
@@ -28,7 +28,7 @@ const CategoryTab = () => {
 
   const handleUpdateCategories = () => {
     if (editingCategory) {
-      axios.put(`http://api-proyecto-final.test/api/categories/${editingCategory.id}`, {...formValues, picture: image.base64 })
+      axios.put(`/categories/${editingCategory.id}`, {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setEditingCategory(null)
@@ -37,7 +37,7 @@ const CategoryTab = () => {
         console.error('There was an error!', error)
       })
     } else {
-      axios.post('http://api-proyecto-final.test/api/categories', {...formValues, picture: image.base64 })
+      axios.post('/categories', {...formValues, picture: image.base64 })
       .then(response => {
         setIsModalVisible(false)
         setCategories([...categories, response.data])
@@ -50,7 +50,7 @@ const CategoryTab = () => {
   }
 
   const handleDeleteCategories = (categoryId) => {
-    axios.delete(`http://api-proyecto-final.test/api/categories/${categoryId}`)
+    axios.delete(`/categories/${categoryId}`)
     .then(response => {
       message.success('Categoría eliminada con exito')
     })

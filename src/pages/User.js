@@ -31,7 +31,7 @@ const User = ({}) => {
   }, [orderId])
 
   const getUser = async() => {
-    await axios.get(`http://api-proyecto-final.test/api/customers/${userId}`)
+    await axios.get(`/customers/${userId}`)
     .then(response => {
       setUser(response.data)
     })
@@ -41,7 +41,7 @@ const User = ({}) => {
   }
 
   const getOrders = async() => {
-    await axios.get(`http://api-proyecto-final.test/api/orders/${userId}`)
+    await axios.get(`/orders/${userId}`)
     .then(response => {
       setOrders(response.data)
     })
@@ -51,7 +51,7 @@ const User = ({}) => {
   }
 
   const getOrderDetails = async() => {
-    await axios.get(`http://api-proyecto-final.test/api/order-details/${orderId}`)
+    await axios.get(`/order-details/${orderId}`)
     .then(response => {
       setOrderDetails(response.data)
     })
@@ -88,7 +88,7 @@ const User = ({}) => {
       setPaymentMethod({ ...paymentMethod, cvv: null })
       return
     }
-    axios.post('http://api-proyecto-final.test/api/payment-methods', {...paymentMethod,customer_id:userId})
+    axios.post('/payment-methods', {...paymentMethod,customer_id:userId})
     .then(response => {
       message.success('tarjeta agregada')
     })
@@ -116,11 +116,11 @@ const User = ({}) => {
       {paymentMethodVisible&&
         <div>
           <h1>Agregar método de pago</h1>
-          <form onSubmit={handleAddPaymentMethod}>
+          <form>
             <input type="text" placeholder="Número de tarjeta" onChange={e => setPaymentMethod({ ...paymentMethod, cardNumber: e.target.value })} required />
             <input type="text" placeholder="Fecha de vencimiento" onChange={e => setPaymentMethod({ ...paymentMethod, expiryDate: e.target.value })} required />
             <input type="text" placeholder="CVV" onChange={e => setPaymentMethod({ ...paymentMethod, cvv: e.target.value })} required />
-            <button type="submit">Agregar método de pago</button>
+            <button onClick={(e)=>{e.preventDefault();handleAddPaymentMethod()}}>Agregar método de pago</button>
           </form>
         </div>
       }
