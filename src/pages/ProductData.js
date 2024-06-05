@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Input, message, Avatar} from 'antd'
 import { useParams } from 'react-router-dom'
-import { DoubleRightOutlined } from '@ant-design/icons'
+import { DoubleRightOutlined, UserOutlined } from '@ant-design/icons'
 import moment from 'moment/moment'
 
 const Product = () => {
@@ -64,8 +64,8 @@ const Product = () => {
     await axios.get(`/orders/${token.split('_')[1]}/actual`)
     .then(response => {
       console.log(response.data)
-      if (response.data != {}){
-        axios.post(`/order-details`, {order_id:response.data.id, product_id:id, quantity:peso, unit_price:productData.price})
+      if (response.data.success){
+        axios.post(`/order-details`, {order_id:response.data.order.id, product_id:id, quantity:peso, unit_price:productData.price})
         .then(response => {
           message.success('agregado al carrito')
         })
@@ -132,7 +132,10 @@ const Product = () => {
             <h3>Comentarios</h3>
             {comments?.map((comment, index) => (
               <article>
-                {comment.customer_picture?<img src={comment.customer_picture}/>:<Avatar/>}
+                <Avatar
+                  icon={!comment.picture || comment.picture === "data:application/x-empty;base64," ? <UserOutlined /> : null}
+                  src={comment.picture && comment.picture !== "data:application/x-empty;base64," ? comment.picture : null}
+                />
                 <h5>{comment.customer_name}</h5>
                 <p>{comment.rating}/5</p>
                 <p>{comment.title}</p>

@@ -2,9 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Search from './Search'
+import { useNavigate } from 'react-router-dom';
 
 const RawNavbar = () => {
   const token = localStorage.getItem('token');
+  const navigate = useNavigate()
 
   return (
     <nav>
@@ -20,6 +22,7 @@ const RawNavbar = () => {
             ) : (
               <li><Link to="/profile">Perfil</Link></li>
             )}
+            <li onClick={()=>{localStorage.removeItem('token');navigate('/')}}>Cerrar Sesión</li>
           </>
         ) : (
           <li><Link to="/login">Iniciar sesión</Link></li>

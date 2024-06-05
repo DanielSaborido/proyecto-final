@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Button, Modal, Form, Radio, message } from 'antd'
+import { Button, Modal, Form, Radio, message, Avatar } from 'antd'
 import styled from 'styled-components';
+import { UserOutlined } from '@ant-design/icons';
 
 const RawUser = ({ className }) => {
   const token = (localStorage.getItem('token')).split('_');
@@ -113,12 +114,17 @@ const RawUser = ({ className }) => {
 
   const cerrarModal = () => {
     setIsModalVisible(false)
+    setPaymentMethodVisible(false)
   }
 
   return (
     <div className={className}>
       <section>
-        <img src={user.picture} alt="User"/>
+        <Avatar
+          icon={!user.picture || user.picture === "data:application/x-empty;base64," ? <UserOutlined /> : null}
+          src={user.picture && user.picture !== "data:application/x-empty;base64," ? user.picture : null}
+          size={125}
+        />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
         <button onClick={() => setPaymentMethodVisible(true)}>Agregar metodo de pago</button>
@@ -131,18 +137,21 @@ const RawUser = ({ className }) => {
         </ul>
       </section>
       {paymentMethodVisible&&
-        <div>
-          <h1>Agregar método de pago</h1>
-          <form>
-            <input type="text" placeholder="Número de tarjeta" onChange={e => setPaymentMethod({ ...paymentMethod, card_number: e.target.value })} required />
-            <input type="text" placeholder="Fecha de vencimiento" onChange={e => setPaymentMethod({ ...paymentMethod, expiry_date: e.target.value })} required />
-            <input type="text" placeholder="CVV" onChange={e => setPaymentMethod({ ...paymentMethod, cvv: e.target.value })} required />
-            <button onClick={(event)=>{event.preventDefault();handleAddPaymentMethod()}}>Agregar método de pago</button>
-          </form>
+        <div className='modal'>
+          <div className='modal-contenido'>
+            <span className='cerrar' onClick={cerrarModal}>X</span>
+            <h2>Agregar método de pago</h2>
+            <form>
+              <input type="text" placeholder="Número de tarjeta" onChange={e => setPaymentMethod({ ...paymentMethod, card_number: e.target.value })} required />
+              <input type="text" placeholder="Fecha de vencimiento" onChange={e => setPaymentMethod({ ...paymentMethod, expiry_date: e.target.value })} required />
+              <input type="text" placeholder="CVV" onChange={e => setPaymentMethod({ ...paymentMethod, cvv: e.target.value })} required />
+              <button onClick={(event)=>{event.preventDefault();handleAddPaymentMethod()}}>Agregar método de pago</button>
+            </form>
+          </div>
         </div>
       }
       {isModalVisible && (
-        <div id='miModal' className='modal'>
+        <div className='modal'>
           <div className='modal-contenido'>
             <span className='cerrar' onClick={cerrarModal}>X</span>
             <h2>Detalles de la orden</h2>
