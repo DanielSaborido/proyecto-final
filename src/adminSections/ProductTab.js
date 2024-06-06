@@ -35,12 +35,13 @@ const RawProductTab = ({ className }) => {
 
   const getProducts = () => {
     axios.get('/products')
-      .then(response => {
-        setProducts(response.data)
-      })
-      .catch(error => {
-        console.error('There was an error!', error)
-      })
+    .then(response => {
+      console.log(response.data)
+      setProducts(response.data)
+    })
+    .catch(error => {
+      console.error('There was an error!', error)
+    })
   }
   
   const getCategories = () => {

@@ -3,13 +3,14 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const RawCategory = () => {
+const RawCategory = ({ className }) => {
   const navigate = useNavigate()
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     axios.get('/categories')
      .then(response => {
+      console.log(response.data)
         setCategories(response.data);
       })
      .catch(error => {
@@ -18,17 +19,16 @@ const RawCategory = () => {
   }, []);
 
   return (
-    <>
-      <h1>Categorías</h1>
+    <div className={className}>
       <section className="categories">
         {categories?.map((category, index) => (
           <div key={index} className="category_card" onClick={() => navigate(`/products/list/${category.id}`)}>
-            <img src={category.image} alt={category.name} className="category_image" />
+            <img src={category.picture} alt={category.name} className="category_image" />
             <h2>{category.name}</h2>
           </div>
         ))}
       </section>
-    </>
+    </div>
   );
 }
 

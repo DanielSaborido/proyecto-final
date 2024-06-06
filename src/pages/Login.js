@@ -3,14 +3,14 @@ import { message } from "antd"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const Login = () => {
+const Login = ({ className }) => {
   const navigate = useNavigate()
   const [credentials, setCredentials] = useState({email: '', password: ''})
   const [register, setRegister] = useState({ name: '', email: '', password: '', confirmPassword: '', address: '', phone: '' })
   const [paymentMethod, setPaymentMethod] = useState({
-    cardNumber: "",
-    expiryDate: "",
-    cvv: ""})
+    card_number: null,
+    expiry_date: null,
+    cvv: null})
   const [paymentMethodVisible, setPaymentMethodVisible] = useState(false)
   const [registerVisible, setRegisterVisible] = useState(false)
 
@@ -27,19 +27,19 @@ const Login = () => {
     })
   }
 
-  const handleRegister = async(event) => {
-    event.preventDefault();
+  const handleRegister = async() => {
     if (register.password !== register.confirmPassword) {
       message.error('Las contraseñas no coinciden')
       return
     }
 
-    await axios.post('/register', register)
+    axios.post('/customers', register)
     .then(response => {
+      console.log(response.data)
       localStorage.setItem('token', response.data.token)
       const { cardNumber, expiryDate, cvv} = paymentMethod
       if (cardNumber && expiryDate && cvv) {
-        axios.post('/payment-methods', {...paymentMethod, customer_id: response.data.id})
+        axios.post('/payment-methods', {...paymentMethod, customer_id: response.data.customer.id})
         .then(response => {
           message.success('Usuario registrado con exito')
           navigate('/')
@@ -57,8 +57,7 @@ const Login = () => {
     })
   }
 
-  const handleAddPaymentMethod = (event) => {
-    event.preventDefault()
+  const handleAddPaymentMethod = () => {
     const { cardNumber, expiryDate, cvv } = paymentMethod
     if (!cardNumber || !expiryDate || !cvv) {
       message.error("Por favor, complete todos los campos")
@@ -89,7 +88,7 @@ const Login = () => {
   }
 
   return (
-    <>
+    <div className={className}>
       <h1>{registerVisible ? 'Registro' : 'Iniciar sesión'}</h1>
 
       {registerVisible ? (
@@ -123,7 +122,7 @@ const Login = () => {
           </form>
         </div>
       )}
-    </>
+    </div>
   )
 }
 

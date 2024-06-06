@@ -5,7 +5,7 @@ import CategoryTab from '../adminSections/CategoryTab'
 import ProductTab from '../adminSections/ProductTab'
 import UserTab from '../adminSections/UserTab'
 
-const Admin = () => {
+const Admin = ({ className}) => {
   const [activeTab, setActiveTab] = useState('categories')
   const [userTypeAllow, setUserTypeAllow] = useState(null)
   const token = localStorage.getItem('token')
@@ -15,7 +15,7 @@ const Admin = () => {
   }, [token])
 
   return (
-    <div>
+    <div className={className}>
       <h1>Gestión</h1>
       <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
         <Tabs.TabPane tab="Categorías" key="categories">

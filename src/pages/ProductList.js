@@ -3,7 +3,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const RawProductList = ({category}) => {
+const RawProductList = ({ className }) => {
   const navigate = useNavigate()
   const { id } = useParams()
   const [products, setProducts] = useState([])
@@ -25,17 +25,17 @@ const RawProductList = ({category}) => {
   }
 
   return (
-    <>
+    <div className={className}>
       <h1>Productos de </h1>
       <section className="products">
         {products?.map((product, index) => (
           <div key={index} className="product_card" onClick={() => navigate(`/products/${product.id}`)}>
-            <img src={product.image} alt={product.name} className="product_image" />
+            <img src={product.picture} alt={product.name} className="product_image" />
             <h2>{product.name}</h2>
           </div>
         ))}
       </section>
-    </>
+    </div>
   );
 }
 

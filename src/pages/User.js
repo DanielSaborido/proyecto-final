@@ -15,9 +15,9 @@ const RawUser = ({ className }) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [paymentMethodVisible, setPaymentMethodVisible] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState({
-    card_number: "",
-    expiry_date: "",
-    cvv: ""})
+    card_number: null,
+    expiry_date: null,
+    cvv: null})
 
   useEffect(() => {
     if (userId) {

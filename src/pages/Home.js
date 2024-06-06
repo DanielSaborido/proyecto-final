@@ -3,7 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const RawHome = () => {
+const RawHome = ({ className }) => {
   const navigate = useNavigate()
   const [products, setProducts] = useState([]);
 
@@ -22,17 +22,16 @@ const RawHome = () => {
   }
 
   return (
-    <>
-      <h1>Inicio</h1>
+    <div className={className}>
       <section className="products">
         {products?.map((product, index) => (
           <div key={index} className="product_card" onClick={() => navigate(`/products/${product.id}`)}>
-            <img src={product.image} alt={product.name} className="product_image" />
+            <img src={product.picture} alt={product.name} className="product_image" />
             <h2>{product.name}</h2>
           </div>
         ))}
       </section>
-    </>
+    </div>
   );
 }
 

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { DoubleRightOutlined, UserOutlined } from '@ant-design/icons'
 import moment from 'moment/moment'
 
-const Product = () => {
+const Product = ({ className }) => {
   const { id } = useParams()
   const token = localStorage.getItem('token')
   const [productData, setProductData] = useState([])
@@ -97,26 +97,31 @@ const Product = () => {
   }
 
   return (
-    <>
+    <div className={className}>
       <section>
-        <img alt={productData.name} url={productData.name}/>
+        <img alt={productData.name} src={productData.picture}/>
         <h2>{productData.name}</h2>
         <p>{productData.description}</p>
         <p>Price: {productData.price}</p>
-        <label>
-          Cantidad a comprar
-          <select value={peso} onChange={manejarCambioPeso}>
-            <option value={0}>0 kg</option>
-            <option value={0.1}>100 g</option>
-            <option value={0.25}>250 g</option>
-            <option value={0.5}>500 g</option>
-            <option value={1}>1 kg</option>
-            <option value={2.5}>2.5 kg</option>
-            <option value={3}>3 kg</option>
-            <option value={5}>5 kg</option>
-          </select>
-        </label>
-        <button onClick={(e)=>{e.preventDefault();agregarCarrito()}}>Agregar al carrito</button>
+        {token ?
+          <>
+            <label>
+              Cantidad a comprar
+              <select value={peso} onChange={manejarCambioPeso}>
+                <option value={0}>0 kg</option>
+                <option value={0.1}>100 g</option>
+                <option value={0.25}>250 g</option>
+                <option value={0.5}>500 g</option>
+                <option value={1}>1 kg</option>
+                <option value={2.5}>2.5 kg</option>
+                <option value={3}>3 kg</option>
+                <option value={5}>5 kg</option>
+              </select>
+            </label>
+            <button onClick={(e)=>{e.preventDefault();agregarCarrito()}}>Agregar al carrito</button>
+          </>:
+          <h3>Debes registrarte para comprar o comentar</h3>
+        }
       </section>
       <section>
         {token &&
@@ -145,7 +150,7 @@ const Product = () => {
           </>
         }
       </section>
-    </>
+    </div>
   )
 }
 

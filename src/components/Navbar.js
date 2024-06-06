@@ -1,16 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import Search from './Search'
 import { useNavigate } from 'react-router-dom';
 
-const RawNavbar = () => {
+const RawNavbar = ({className}) => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate()
 
   return (
-    <nav>
-      <Search/>
+    <nav className={className}>
       <ul>
         <li><Link to="/">Inicio</Link></li>
         <li><Link to="/categories">Categorías</Link></li>
@@ -33,33 +31,6 @@ const RawNavbar = () => {
 }
 
 const Navbar = styled(RawNavbar)`
-  nav {
-    background-color: #333;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-
-  nav li {
-    margin-right: 20px;
-  }
-
-  nav a {
-    color: #fff;
-    text-decoration: none;
-  }
-
-  nav a:hover {
-    color: #ccc;
-  }
 `
 
 export default Navbar

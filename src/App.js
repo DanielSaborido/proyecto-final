@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Navbar from './components/Navbar'
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'
+import Header from './components/Header'
 import Home from './pages/Home'
 import Category from './pages/Category'
 import ProductList from './pages/ProductList'
@@ -25,7 +25,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/categories" element={<Category />} />

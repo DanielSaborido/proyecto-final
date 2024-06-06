@@ -1,80 +1,77 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
-const RawSearch = () => {
+const RawSearch = ({className}) => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
-  const [showClear, setShowClear] = useState(false);
+  const [productsFilter, setProductsFilter] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  const getProducts = () => {
+    axios.get('/products')
+    .then(response => {
+      console.log(response.data)
+      setProducts(response.data)
+      setProductsFilter(response.data)
+    })
+    .catch(error => {
+      console.error('There was an error!', error)
+    })
+  }
 
   const handleSearch = async (event) => {
     event.preventDefault()
     setSearchTerm(event.target.value);
-    setShowClear(true);
-    await axios.get(`/products/search`, {params: { search: event.target.value }})
-   .then(response => {
-    console.log(response.data)
-      setProducts(response.data);
-    })
-   .catch(error => {
-      console.error('There was an error!', error);
-    });
+    if (event.target.value!==''){
+      setShowSearch(true);
+      const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(event.target.value.toLowerCase())
+      ).slice(0, 5);
+      setProductsFilter(filteredProducts);
+    } else {clear()}
   }
 
-  const handleClear = () => {
-    setSearchTerm('');
-    setShowClear(false);
+  const clear = () => {
+    setProductsFilter(products)
+    setShowSearch(false)
+    setSearchTerm('')
   }
 
   return (
-    <>
-      <div className='input_container'>
+    <div className={className}>
+      <section className='input_container'>
         <input
           type="text"
           placeholder='Busqueda de productos'
           value={searchTerm}
-          onChange={handleSearch}
+          onInput={handleSearch}
         />
-        {showClear && (
-          <SearchOutlined
-            className='search_icon'
-            onClick={handleClear}
-          />
-        )}
-      </div>
-      {products.length > 0 && (
-        <div>
+        <SearchOutlined
+          className='search_icon'
+        />
+      </section>
+      {showSearch && (
+        <section>
           <ul>
-            {products?.map((product) => (
-              <li key={product.id} onClick={() => navigate(`/products/${product.id}`)}>{product.name}</li>
+            {productsFilter?.map((product) => (
+              <li key={product.id} onClick={() => {clear();navigate(`/products/${product.id}`)}}>{product.name}</li>
             ))}
           </ul>
-        </div>
+        </section>
       )}
-    </>
+    </div>
   );
 }
 
 const Search = styled(RawSearch)`
-  .input_container{
-    position: relative;
-  }
-  input{
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-  }
-  .search_icon{
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
 `
 
 export default Search;

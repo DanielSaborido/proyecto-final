@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Button, Modal, Form, Radio, message } from 'antd';
 import styled from 'styled-components';
 
-const RawShoppingCart = () => {
+const RawShoppingCart = ({className}) => {
   const token = localStorage.getItem('token');
   const customer = token.split('_')[1];
   const [cart, setCart] = useState({});
@@ -13,9 +13,9 @@ const RawShoppingCart = () => {
   const [paymentMethodVisible, setPaymentMethodVisible] = useState(false);
   const [form] = Form.useForm();
   const [paymentMethod, setPaymentMethod] = useState({
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
+    card_number: null,
+    expiry_date: null,
+    cvv: null
   });
 
   useEffect(() => {
@@ -71,8 +71,8 @@ const RawShoppingCart = () => {
     });
   };
 
-  const handlePaymentMethod = (customer) => {
-    return axios.get(`/payment-methods/${customer}`)
+  const handlePaymentMethod = async(customer) => {
+    return await axios.get(`/payment-methods/${customer}`)
       .then(response => {
         if (response.data.success) {
           message.success('Pago realizado exitosamente');
@@ -141,7 +141,7 @@ const RawShoppingCart = () => {
   };
 
   return (
-    <div>
+    <div className={className}>
       <h1>Carrito</h1>
       <table>
         <thead>
