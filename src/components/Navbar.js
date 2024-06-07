@@ -20,7 +20,7 @@ const RawNavbar = ({className}) => {
             ) : (
               <li><Link to="/profile">Perfil</Link></li>
             )}
-            <li onClick={()=>{localStorage.removeItem('token');navigate('/')}}>Cerrar Sesión</li>
+            <li onClick={()=>{localStorage.removeItem('token')}}><Link to="/">Cerrar sesión</Link></li>
           </>
         ) : (
           <li><Link to="/login">Iniciar sesión</Link></li>

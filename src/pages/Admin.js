@@ -16,7 +16,6 @@ const Admin = ({ className}) => {
 
   return (
     <div className={className}>
-      <h1>Gestión</h1>
       <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
         <Tabs.TabPane tab="Categorías" key="categories">
           <CategoryTab />

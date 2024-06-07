@@ -26,7 +26,6 @@ const RawProductList = ({ className }) => {
 
   return (
     <div className={className}>
-      <h1>Productos de </h1>
       <section className="products">
         {products?.map((product, index) => (
           <div key={index} className="product_card" onClick={() => navigate(`/products/${product.id}`)}>

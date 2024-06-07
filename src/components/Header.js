@@ -1,23 +1,72 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Search from './Search'
 import Navbar from './Navbar'
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import axios from 'axios'
 
 const RawHeader = ({ className }) => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const [categoryData, setCategoryData] = useState([])
+
+  useEffect(() => {
+    if (/^\/products\/list\/\d+$/.test(location.pathname)){
+      getCategory(location.pathname.split('/')[3])
+    }
+  }, [location.pathname])
+
+  const getCategory = async(id) =>{
+    await axios.get(`/categories/${id}`)
+    .then(response => {
+      console.log(response.data)
+      setCategoryData(response.data)
+    })
+    .catch(error => {
+      console.error('There was an error!', error)
+    })
+  }
+
+  const getTitle = (pathname) => {
+    if (/^\/products\/list\/\d+$/.test(pathname)) {
+      return `Productos de ${categoryData.name}`;
+    } else if (/^\/products\/\d+$/.test(pathname)) {
+      return 'Detalles del Producto';
+    } else {
+      switch(pathname) {
+        case '/':
+          return 'El Chopo';
+        case '/categories':
+          return 'Categorias';
+        case '/login':
+          return 'Log In';
+        case '/gestion':
+          return 'Gestion Administrativa';
+        case '/profile':
+          return 'Perfil Usuario';
+        case '/cart':
+          return 'Carrito';
+        default:
+          return 'El Chopo';
+      }
+    }
+  }
+
   return (
     <header className={className}>
-      <img alt='logo' src='/logo192.png' onClick={()=>navigate('/')}/>
-      <h1>El Chopo</h1>
-      <Search/>
-      <Navbar />
+      <div className='cabecera'>
+        <img alt='logo' src='/logo192.png' onClick={()=>navigate('/')}/>
+        <h1>{getTitle(location.pathname)}</h1>
+        <Search/>
+        <Navbar />
+      </div>
     </header>
   )
 }
 
 const Header = styled(RawHeader)`
-header {
+.cabecera {
+    background-color: #F4EB9B;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -36,7 +85,6 @@ header {
   }
 
   nav {
-    background-color: #333;
     padding: 1rem;
     display: flex;
     justify-content: space-between;
@@ -55,7 +103,7 @@ header {
   }
 
   nav a {
-    color: #fff;
+    color: #000;
     text-decoration: none;
   }
 
