@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import Home from './pages/Home'
 import Category from './pages/Category'
@@ -11,18 +11,19 @@ import User from './pages/User'
 import Admin from './pages/Admin'
 import ShoppingCart from './pages/ShoppingCart'
 import styled from 'styled-components';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function RawApp({className}) {
-  const [userType, setUserType] = useState(null)
-  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL
+  const [userType, setUserType] = useState(null);
+  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const userType = token.charAt(0) === 'C'? 'user' : 'admin'
-      setUserType(userType)
+      const userType = token.charAt(0) === 'C' ? 'customer' : 'user';
+      setUserType(userType);
     }
-  }, [])
+  }, []);
 
   return (
     <div className={className}>
@@ -34,9 +35,10 @@ function RawApp({className}) {
           <Route path="/products/list/:id" element={<ProductList />} />
           <Route path="/products/:id" element={<Product />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<User />} />
-          <Route path="/gestion" element={<Admin />} />
-          <Route path="/cart" element={<ShoppingCart />} />
+          <Route path="/profile" element={<ProtectedRoute element={<User />} allowedRoles={['customer']} />} />
+          <Route path="/gestion" element={<ProtectedRoute element={<Admin />} allowedRoles={['user']} />} />
+          <Route path="/cart" element={<ProtectedRoute element={<ShoppingCart />} allowedRoles={['customer']} />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </div>

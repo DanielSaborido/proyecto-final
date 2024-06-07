@@ -4,8 +4,9 @@ import { Input, message, Avatar} from 'antd'
 import { useParams } from 'react-router-dom'
 import { DoubleRightOutlined, UserOutlined } from '@ant-design/icons'
 import moment from 'moment/moment'
+import styled from 'styled-components'
 
-const Product = ({ className }) => {
+const RawProduct = ({ className }) => {
   const { id } = useParams()
   const token = localStorage.getItem('token')
   const [productData, setProductData] = useState([])
@@ -103,7 +104,7 @@ const Product = ({ className }) => {
         <h2>{productData.name}</h2>
         <p>{productData.description}</p>
         <p>Price: {productData.price}</p>
-        {token ?
+        {token.split('_')[0]==='C' ?
           <>
             <label>
               Cantidad a comprar
@@ -119,31 +120,49 @@ const Product = ({ className }) => {
               </select>
             </label>
             <button onClick={(e)=>{e.preventDefault();agregarCarrito()}}>Agregar al carrito</button>
-          </>:
+          </>:token?<></>:
           <h3>Debes registrarte para comprar o comentar</h3>
         }
       </section>
       <section>
         {token &&
           <form>
-            <Input name="rating" type='number' value={formComment.rating} onChange={(event) => setFormComment({...formComment, rating: event.target.value })} required />
-            <Input name="title" value={formComment.title} onChange={(event) => setFormComment({...formComment, title: event.target.value })}/>
-            <Input name="comment" value={formComment.comment} onChange={(event) => setFormComment({...formComment, comment: event.target.value })}/>
-            <button onClick={(e)=>{e.preventDefault();postComent()}}><DoubleRightOutlined /></button>
+            <div className="form-item">
+              <label htmlFor="puntuacion">Puntuación</label>
+              <select id="puntuacion" value={formComment.rating} onChange={(event) => setFormComment({ ...formComment, rating: event.target.value })}>
+                <option value={0}>0</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+              </select>
+            </div>
+            <div className="form-item">
+              <label htmlFor="Titulo">Título</label>
+              <input type="text" id="Titulo" placeholder="Título" onChange={(event) => setFormComment({ ...formComment, title: event.target.value })} required />
+            </div>
+            <div className="form-item">
+              <label htmlFor="comentario">Comentario</label>
+              <textarea id="comentario" placeholder="Comentario" onChange={(event) => setFormComment({ ...formComment, comment: event.target.value })} required></textarea>
+            </div>
+            <button onClick={(e) => { e.preventDefault(); postComent() }}><DoubleRightOutlined /></button>
           </form>
         }
         {comments.length !== 0 &&
           <>
             <h3>Comentarios</h3>
             {comments?.map((comment, index) => (
-              <article>
-                <Avatar
-                  icon={!comment.picture || comment.picture === "data:application/x-empty;base64," ? <UserOutlined /> : null}
-                  src={comment.picture && comment.picture !== "data:application/x-empty;base64," ? comment.picture : null}
-                />
-                <h5>{comment.customer_name}</h5>
-                <p>{comment.rating}/5</p>
-                <p>{comment.title}</p>
+              <article key={index} className="comment">
+                <div className="comment-header">
+                  <Avatar
+                    icon={!comment.picture || comment.picture === "data:application/x-empty;base64," ? <UserOutlined /> : null}
+                    src={comment.picture && comment.picture !== "data:application/x-empty;base64," ? comment.picture : null}
+                  />
+                  <h5>{comment.customer_name}</h5>
+                  <p>{comment.rating}/5</p>
+                </div>
+                <p className="comment-title">{comment.title}</p>
                 <p>{comment.comment}</p>
               </article>
             ))}
@@ -151,7 +170,76 @@ const Product = ({ className }) => {
         }
       </section>
     </div>
-  )
+  );
 }
+
+const Product = styled(RawProduct)`
+
+form {
+  width: 25%;
+  border: 1px solid #000;
+}
+
+.form-item {
+  margin-bottom: 20px;
+}
+
+.form-item label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-item select,
+.form-item input[type="text"],
+.form-item textarea {
+  width: 100%;
+  padding: 8px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-item textarea {
+  resize: vertical;
+}
+
+.comment {
+  margin-bottom: 20px;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment-header h5 {
+  margin: 0 10px;
+}
+
+.comment-header p {
+  margin: 0 10px;
+}
+
+.comment-title {
+  font-weight: bold;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4d90fe;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #357ae8;
+}
+`;
 
 export default Product
