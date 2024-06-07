@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  react_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react_app
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_BASE_URL=http://laravel_app:8080/api
