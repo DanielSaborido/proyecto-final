@@ -15,11 +15,13 @@ const RawNavbar = ({className}) => {
         <li><Link to="/categories"><TagsOutlined /></Link></li>
         {token? (
           <>
-            <li><Link to="/cart"><ShoppingCartOutlined /></Link></li>
             {token.charAt(0) !== 'C'? (
               <li><Link to="/gestion"><ControlOutlined /></Link></li>
             ) : (
-              <li><Link to="/profile"><UserOutlined /></Link></li>
+              <>
+                <li><Link to="/cart"><ShoppingCartOutlined /></Link></li>
+                <li><Link to="/profile"><UserOutlined /></Link></li>
+              </>
             )}
             <li onClick={()=>{localStorage.removeItem('token')}}><Link to="/"><LogoutOutlined /></Link></li>
           </>
