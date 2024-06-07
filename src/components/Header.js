@@ -19,7 +19,6 @@ const RawHeader = ({ className }) => {
   const getCategory = async(id) =>{
     await axios.get(`/categories/${id}`)
     .then(response => {
-      console.log(response.data)
       setCategoryData(response.data)
     })
     .catch(error => {
@@ -70,12 +69,12 @@ const Header = styled(RawHeader)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
   }
   
   img {
-    height: 150px;
+    height: 100px;
     cursor: pointer;
+    padding: 0px;
   }
   
   h1 {
@@ -117,15 +116,26 @@ const Header = styled(RawHeader)`
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 95%;
+    font-size: 0.85rem;
+    width: 100%;
   }
   .search_icon{
     position: absolute;
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-    cursor: pointer;
   }  
+  .search {
+    position: absolute;
+    width: 17%;
+    background-color: #F4EB9B;
+    border-radius: 4px;
+    z-index: 1000;
+    font-size: 1rem;
+  }
+  .search ul{
+    list-style: none;
+  }
 `
 
 export default Header

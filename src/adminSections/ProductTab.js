@@ -246,7 +246,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin: 25px 0;
-  font-size: 0.9em;
+  font-size: 1rem;
   font-family: sans-serif;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -268,7 +268,7 @@ tbody tr:nth-child(even) {
 
 tbody tr:last-child {
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1rem;
 }
 
 .modal {

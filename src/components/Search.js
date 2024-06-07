@@ -18,7 +18,6 @@ const RawSearch = ({className}) => {
   const getProducts = () => {
     axios.get('/products')
     .then(response => {
-      console.log(response.data)
       setProducts(response.data)
       setProductsFilter(response.data)
     })
@@ -59,7 +58,7 @@ const RawSearch = ({className}) => {
         />
       </section>
       {showSearch && (
-        <section>
+        <section className='search'>
           <ul>
             {productsFilter?.map((product) => (
               <li key={product.id} onClick={() => {clear();navigate(`/products/${product.id}`)}}>{product.name}</li>

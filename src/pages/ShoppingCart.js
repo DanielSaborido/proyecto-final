@@ -11,7 +11,9 @@ const RawShoppingCart = ({className}) => {
   const [totalCost, setTotalCost] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [paymentMethodVisible, setPaymentMethodVisible] = useState(false);
-  const [form] = Form.useForm();
+  const [formData, setFormData] = useState({
+    paymentMethod: '',
+  });
   const [paymentMethod, setPaymentMethod] = useState({
     card_number: null,
     expiry_date: null,
@@ -21,7 +23,8 @@ const RawShoppingCart = ({className}) => {
   useEffect(() => {
     axios.get(`/orders/${customer}/actual`)
       .then(response => {
-        setCart(response.data);
+        console.log(response.data.order);
+        setCart(response.data.order);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -43,32 +46,35 @@ const RawShoppingCart = ({className}) => {
   }, [cart]);
 
   const handleOk = () => {
-    form.validateFields().then(values => {
-      let paymentMethod = values.paymentMethod;
-      let status = '';
-
-      if (paymentMethod === 'creditCard' || paymentMethod === 'debitCard') {
-        if (handlePaymentMethod(customer)) {
-          status = 'paid';
-        } else {
-          setPaymentMethodVisible(true);
-          return;
-        }
-      } else if (paymentMethod === 'cash') {
-        status = 'cash';
-      } else if (paymentMethod === 'store') {
-        status = 'store';
+    let paymentMethod = formData.paymentMethod;
+    let status = '';
+  
+    if (!paymentMethod) {
+      console.error('Por favor, seleccione un método de pago.');
+      return;
+    }
+  
+    if (paymentMethod === 'creditCard' || paymentMethod === 'debitCard') {
+      if (handlePaymentMethod(customer)) {
+        status = 'paid';
+      } else {
+        setPaymentMethodVisible(true);
+        return;
       }
-
-      axios.put(`/orders/${cart.id}`, { ...cart, status: status, total:totalCost })
-        .then(response => {
-          console.log(response.data);
-          setIsModalVisible(false);
-        })
-        .catch(error => {
-          console.error('There was an error!', error);
-        });
-    });
+    } else if (paymentMethod === 'cash') {
+      status = 'cash';
+    } else if (paymentMethod === 'store') {
+      status = 'store';
+    }
+  
+    axios.put(`/orders/${cart.id}`, { ...cart, status: status, total: totalCost })
+      .then(response => {
+        console.log(response.data);
+        setIsModalVisible(false);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
   };
 
   const handlePaymentMethod = async(customer) => {
@@ -142,7 +148,6 @@ const RawShoppingCart = ({className}) => {
 
   return (
     <div className={className}>
-      <h1>Carrito</h1>
       <table>
         <thead>
           <tr>
@@ -164,26 +169,31 @@ const RawShoppingCart = ({className}) => {
           </tr>
         </tbody>
       </table>
-      <Button type="primary" onClick={showPaymentModal}>
-        Finalizar compra
-      </Button>
-      <Modal
-        title="Seleccionar método de pago"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Form form={form} layout="vertical">
-          <Form.Item name="paymentMethod" rules={[{ required: true, message: 'Por favor, seleccione un método de pago.' }]}>
-            <Radio.Group>
-              <Radio value="creditCard">Tarjeta de crédito</Radio>
-              <Radio value="debitCard">Tarjeta de débito</Radio>
-              <Radio value="cash">Efectivo</Radio>
-              <Radio value="store">En tienda</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <button onClick={()=>showPaymentModal()}>Finalizar compra</button>
+      {isModalVisible && (
+        <div className='modal'>
+          <div className='modal-contenido'>
+            <span className='cerrar' onClick={handleCancel}>X</span>
+            <h2>Seleccionar método de pago</h2>
+            <form onSubmit={()=>handleOk()}>
+              <div className="form-item">
+                <label>Método de pago:</label>
+                <div className="radio-group">
+                  <input type="radio" id="creditCard" name="paymentMethod" value="creditCard" onChange={e => setFormData({ ...formData, paymentMethod: e.target.value })} required />
+                  <label htmlFor="creditCard">Tarjeta de crédito</label>
+                  <input type="radio" id="debitCard" name="paymentMethod" value="debitCard" onChange={e => setFormData({ ...formData, paymentMethod: e.target.value })} required />
+                  <label htmlFor="debitCard">Tarjeta de débito</label>
+                  <input type="radio" id="cash" name="paymentMethod" value="cash" onChange={e => setFormData({ ...formData, paymentMethod: e.target.value })} required />
+                  <label htmlFor="cash">Efectivo</label>
+                  <input type="radio" id="store" name="paymentMethod" value="store" onChange={e => setFormData({ ...formData, paymentMethod: e.target.value })} required />
+                  <label htmlFor="store">En tienda</label>
+                </div>
+              </div>
+              <button type="submit">Confirmar pago</button>
+            </form>
+          </div>
+        </div>
+      )}
       {paymentMethodVisible && (
         <div className='modal'>
           <div className='modal-contenido'>
@@ -265,6 +275,19 @@ const ShoppingCart = styled(RawShoppingCart)`
     color: black;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .form-item {
+    margin-bottom: 16px;
+  }
+
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .radio-group label {
+    margin-left: 8px;
   }
 `;
 
