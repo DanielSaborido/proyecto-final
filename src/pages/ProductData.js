@@ -104,7 +104,7 @@ const RawProduct = ({ className }) => {
         <h2>{productData.name}</h2>
         <p>{productData.description}</p>
         <p>Price: {productData.price}</p>
-        {token.split('_')[0]==='C' ?
+        {token?token.split('_')[0]==='C' ?
           <>
             <label>
               Cantidad a comprar
@@ -120,7 +120,7 @@ const RawProduct = ({ className }) => {
               </select>
             </label>
             <button onClick={(e)=>{e.preventDefault();agregarCarrito()}}>Agregar al carrito</button>
-          </>:token?<></>:
+          </>:<></>:
           <h3>Debes registrarte para comprar o comentar</h3>
         }
       </section>
