@@ -40,8 +40,8 @@ const RawUser = ({ className }) => {
 
   useEffect(() => {
     if (orderDetails) {
-      const newTotalCost = orderDetails.reduce((acc, product) => acc + product.total_cost, 0)
-      setTotalCost(newTotalCost)
+      const total = orderDetails.reduce((sum, product) => sum + product.total_cost, 0);
+      setTotalCost(parseFloat(total).toFixed(2));
     }
   }, [orderDetails])
 
@@ -77,8 +77,11 @@ const RawUser = ({ className }) => {
     console.log(orderId)
     await axios.get(`/order-details/${orderId}`)
     .then(response => {
-      console.log(response.data)
-      setOrderDetails(response.data)
+      const data = response.data.map(product => ({
+        ...product,
+        total_cost: parseFloat(product.total_cost).toFixed(2)
+      }));
+      setOrderDetails(data);
     })
     .catch(error => {
       console.error('There was an error!', error)
@@ -245,7 +248,7 @@ const RawUser = ({ className }) => {
               <thead>
                 <tr>
                   <th>Producto</th>
-                  <th>Cantidad (kg)</th>
+                  <th>Cantidad</th>
                   <th>Precio</th>
                 </tr>
               </thead>
@@ -254,13 +257,13 @@ const RawUser = ({ className }) => {
                     return (
                       <tr key={product.id}>
                         <td>{product.product_name}</td>
-                        <td>{product.quantity}</td>
-                        <td>{product.total_cost}</td>
+                        <td>{product.quantity} kg</td>
+                        <td>{product.total_cost} €</td>
                       </tr>
                     )
                   })}
                 <tr>
-                  <td colSpan={3}>Coste total: {totalCost}€</td>
+                  <td colSpan={3}>Coste total: {totalCost} €</td>
                 </tr>
               </tbody>
             </table>

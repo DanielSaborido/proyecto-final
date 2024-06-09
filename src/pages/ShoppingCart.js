@@ -35,9 +35,13 @@ const RawShoppingCart = ({className}) => {
     if (cart && Object.keys(cart).length > 0) {
       axios.get(`/order-details/${cart.id}`)
         .then(response => {
-          setLastCart(response.data);
-          const total = response.data.reduce((sum, product) => sum + product.total_cost, 0);
-          setTotalCost(total);
+          const data = response.data.map(product => ({
+            ...product,
+            total_cost: parseFloat(product.total_cost).toFixed(2)
+          }));
+          setLastCart(data)
+          const total = data.reduce((sum, product) => sum + product.total_cost, 0);
+          setTotalCost(parseFloat(total).toFixed(2));
         })
         .catch(error => {
           console.error('There was an error!', error);
@@ -160,12 +164,12 @@ const RawShoppingCart = ({className}) => {
           {lastCart.map(product => (
             <tr key={product.id}>
               <td>{product.product_name}</td>
-              <td>{product.quantity}</td>
-              <td>{product.total_cost}</td>
+              <td>{product.quantity} kg</td>
+              <td>{product.total_cost} €</td>
             </tr>
           ))}
           <tr>
-            <td colSpan={3}>Coste total: {totalCost}€</td>
+            <td colSpan={3}>Coste total: {totalCost} €</td>
           </tr>
         </tbody>
       </table>
