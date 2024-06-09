@@ -15,7 +15,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function RawApp({className}) {
   const [userType, setUserType] = useState(null);
-  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+  axios.defaults.baseURL = 'https://api-proyecto-final-production.up.railway.app/api';
 
   useEffect(() => {
     const token = localStorage.getItem('token');
