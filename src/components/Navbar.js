@@ -1,12 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom';
 import { ControlOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, ShoppingCartOutlined, TagsOutlined, UserOutlined } from '@ant-design/icons';
 
 const RawNavbar = ({className}) => {
   const token = localStorage.getItem('token');
-  const navigate = useNavigate()
 
   return (
     <nav className={className}>

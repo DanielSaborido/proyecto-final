@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes,  Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import Home from './pages/Home'
 import Category from './pages/Category'
@@ -14,16 +14,7 @@ import styled from 'styled-components';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function RawApp({className}) {
-  const [userType, setUserType] = useState(null);
   axios.defaults.baseURL = 'https://api-proyecto-final-production.up.railway.app/api';
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const userType = token.charAt(0) === 'C' ? 'customer' : 'user';
-      setUserType(userType);
-    }
-  }, []);
 
   return (
     <div className={className}>

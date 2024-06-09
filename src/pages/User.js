@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Button, Modal, Form, Radio, message, Avatar } from 'antd'
+import { message, Avatar } from 'antd'
 import styled from 'styled-components';
 import { UserOutlined } from '@ant-design/icons';
 
 const RawUser = ({ className }) => {
   const token = (localStorage.getItem('token')).split('_');
   const userId = token[1]
-  const [form] = Form.useForm()
   const [user, setUser] = useState({})
   const [orders, setOrders] = useState([])
   const [totalCost, setTotalCost] = useState(0)
@@ -150,32 +149,35 @@ const RawUser = ({ className }) => {
   };
 
   const handleOk = () => {
-    form.validateFields().then(values => {
-      let paymentMethod = values.paymentMethod;
-      let status = '';
-
-      if (paymentMethod === 'creditCard' || paymentMethod === 'debitCard') {
-        if (handlePaymentMethod(userId)) {
-          status = 'paid';
-        } else {
-          setPaymentMethodVisible(true);
-          return;
-        }
-      } else if (paymentMethod === 'cash') {
-        status = 'cash';
-      } else if (paymentMethod === 'store') {
-        status = 'store';
+    let paymentMethod = formData.paymentMethod;
+    let status = '';
+  
+    if (!paymentMethod) {
+      console.error('Por favor, seleccione un método de pago.');
+      return;
+    }
+  
+    if (paymentMethod === 'creditCard' || paymentMethod === 'debitCard') {
+      if (handlePaymentMethod(userId)) {
+        status = 'paid';
+      } else {
+        setPaymentMethodVisible(true);
+        return;
       }
-
-      axios.put(`/orders/${cart.id}`, { ...cart, status: status, total:totalCost })
-        .then(response => {
-          console.log(response.data);
-          setIsModalVisible(false);
-        })
-        .catch(error => {
-          console.error('There was an error!', error);
-        });
-    });
+    } else if (paymentMethod === 'cash') {
+      status = 'cash';
+    } else if (paymentMethod === 'store') {
+      status = 'store';
+    }
+  
+    axios.put(`/orders/${cart.id}`, { ...cart, status: status, total: totalCost })
+      .then(response => {
+        console.log(response.data);
+        setIsModalVisible(false);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
   };
 
   const showPaymentModal = () => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Input, message, Avatar} from 'antd'
+import { message, Avatar} from 'antd'
 import { useParams } from 'react-router-dom'
 import { DoubleRightOutlined, UserOutlined } from '@ant-design/icons'
 import moment from 'moment/moment'
